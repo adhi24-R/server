@@ -11,5 +11,7 @@
   "description": "",
   "dependencies": {
     "express": "^5.1.0"
+    "axios": "^1.6.2",
+    "nodemailer": "^6.9.4"
   }
 }
