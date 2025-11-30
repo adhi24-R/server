@@ -146,16 +146,21 @@ app.post("/zoho-salesiq", async (req, res) => {
   }
 
   if (session.stage === "phone") {
-    data.phone = text;
+  data.phone = text;
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    data.otp = otp;
+  // generate OTP
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  data.otp = otp;
 
-    console.log("OTP:", otp);
+  // send real OTP email
+  await sendOTPEmail(data.email, otp);
 
-    session.stage = "otp_verify";
-    return res.json(reply(`OTP sent! (Demo OTP: **${otp}**) Enter OTP:`));
-  }
+  session.stage = "otp_verify";
+  return res.json(
+    reply("📩 Your OTP has been sent to your email!\nPlease check your inbox and enter the OTP:")
+  );
+}
+
 
   if (session.stage === "otp_verify") {
     if (text !== data.otp) return res.json(reply("❌ Wrong OTP. Try again:"));
@@ -301,3 +306,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log("LeadSense AI running on port " + PORT);
 });
+
